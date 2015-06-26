@@ -1,0 +1,123 @@
+name: "SWIG wrapper"
+scopeName: "source.swig"
+fileTypes: [
+  'i'
+]
+patterns: [
+  {
+    comment: "Expand on the C++ grammar (source.cpp also includes source.c)"
+    include: "source.cpp"
+  }
+  {
+    comment: "SWIG codeblock: %{ ... %}"
+    name: "source.swig.codeblock"
+    match: "(%\\{|%\\})"
+    captures:
+      1:
+        name: "punctuation.section.embedded.swig"
+  }
+  {
+    comment: "%define (from source.c, replace '#' with '%')"
+    begin: "(?x)\n        \t\t^\\s*\\%\\s*(define)\\s+             # define\n        \t\t((?<id>[a-zA-Z_][a-zA-Z0-9_]*))  # macro name\n        \t\t(?:                              # and optionally:\n        \t\t    (\\()                         # an open parenthesis\n        \t\t        (\n        \t\t            \\s* \\g<id> \\s*       # first argument\n        \t\t            ((,) \\s* \\g<id> \\s*)*  # additional arguments\n        \t\t            (?:\\.\\.\\.)?          # varargs ellipsis?\n        \t\t        )\n        \t\t    (\\))                         # a close parenthesis\n        \t\t)?\n        \t"
+    #'begin': '(?x)\n        \t\t^\\s*\\#\\s*(define)\\s+             # define\n        \t\t((?<id>[a-zA-Z_][a-zA-Z0-9_]*))  # macro name\n        \t\t(?:                              # and optionally:\n        \t\t    (\\()                         # an open parenthesis\n        \t\t        (\n        \t\t            \\s* \\g<id> \\s*       # first argument\n        \t\t            ((,) \\s* \\g<id> \\s*)*  # additional arguments\n        \t\t            (?:\\.\\.\\.)?          # varargs ellipsis?\n        \t\t        )\n        \t\t    (\\))                         # a close parenthesis\n        \t\t)?\n        \t'
+    'beginCaptures':
+      '1':
+        'name': 'keyword.control.import.define.c'
+      '2':
+        'name': 'entity.name.function.preprocessor.c'
+      '4':
+        'name': 'punctuation.definition.parameters.begin.c'
+      '5':
+        'name': 'variable.parameter.preprocessor.c'
+      '7':
+        'name': 'punctuation.separator.parameters.c'
+      '8':
+        'name': 'punctuation.definition.parameters.end.c'
+    'end': '(?=(?://|/\\*))|(?<!\\\\)(?=\\n)'
+    'name': 'meta.preprocessor.macro.c'
+    'patterns': [
+      {
+        'match': '(?>\\\\\\s*\\n)'
+        'name': 'punctuation.separator.continuation.c'
+      }
+      {
+        'include': '$base'
+      }
+    ]
+  }
+  {
+    comment: "%include, %import (from source.c, replace '#' with '%')"
+    begin: "^\\s*%\\s*(include|import)\\b\\s+"
+    #'begin': '^\\s*#\\s*(include|import)\\b\\s+'
+    'captures':
+      '1':
+        'name': 'keyword.control.import.include.c'
+    'end': '(?=(?://|/\\*))|(?<!\\\\)(?=\\n)'
+    'name': 'meta.preprocessor.c.include'
+    'patterns': [
+      {
+        'match': '(?>\\\\\\s*\\n)'
+        'name': 'punctuation.separator.continuation.c'
+      }
+      {
+        'begin': '"'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.c'
+        'end': '"'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.string.end.c'
+        'name': 'string.quoted.double.include.c'
+      }
+      {
+        'begin': '<'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.c'
+        'end': '>'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.string.end.c'
+        'name': 'string.quoted.other.lt-gt.include.c'
+      }
+    ]
+  }
+  {
+    comment: "%module, %extend (from source.cpp 'namespace')"
+    match: "%\\b(module|extend)\\b\\s*(([_A-Za-z][_A-Za-z0-9]*\\b(::)?)+)"
+    #'begin': '\\b(namespace)\\b\\s*([_A-Za-z][_A-Za-z0-9]*\\b)?+'
+    #'beginCaptures':
+    captures:
+      '1':
+        'name': 'storage.type.cpp'
+      '2':
+        'name': 'entity.name.type.cpp'
+    #'captures':
+    #  '1':
+    #    'name': 'keyword.control.namespace.$2'
+    #'end': '(?<=\\})|(?=(;|,|\\(|\\)|>|\\[|\\]|=))'
+    'name': 'meta.namespace-block.cpp'
+  }
+  {
+    comment: "SWIG keywords"
+    name: "source.swig.keyword"
+    match: "%(define|enddef|exception|extend|rename)"
+  }
+  {
+    comment: "Preprocessor keywords (from source.c, replace '#' with '%')"
+    begin: "^\\s*%\\s*(define|defined|elif|else|if|ifdef|ifndef|line|pragma|undef)\\b"
+    #'begin': '^\\s*#\\s*(define|defined|elif|else|if|ifdef|ifndef|line|pragma|undef)\\b'
+    'captures':
+      '1':
+        'name': 'keyword.control.import.c'
+    'end': '(?=(?://|/\\*))|(?<!\\\\)(?=\\n)'
+    'name': 'meta.preprocessor.c'
+    'patterns': [
+      {
+        'match': '(?>\\\\\\s*\\n)'
+        'name': 'punctuation.separator.continuation.c'
+      }
+    ]
+  }
+]

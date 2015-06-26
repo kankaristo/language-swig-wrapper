@@ -1,0 +1,10 @@
+# Backup and temporary files
+*~
+*.autosave
+*.temp
+
+# Default ignores for an Atom package
+.DS_Store
+npm-debug.log
+node_modules
+

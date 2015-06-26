@@ -1,0 +1,4 @@
+'.source.swig':
+  '%include':
+    'prefix': 'inc'
+    'body': '%include "$1"'
