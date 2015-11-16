@@ -1,6 +1,6 @@
 {
   "name": "language-swig-wrapper",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Language support for SWIG (Simplified Wrapper and Interface Generator).",
   "keywords": [],
   "repository": "https://github.com/kankaristo/language-swig-wrapper",
