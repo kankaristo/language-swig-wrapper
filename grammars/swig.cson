@@ -2,6 +2,7 @@ name: "SWIG wrapper"
 scopeName: "source.swig"
 fileTypes: [
   'i'
+  'swg'
 ]
 patterns: [
   {
