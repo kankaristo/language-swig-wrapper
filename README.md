@@ -20,7 +20,7 @@ let you tailor the wrapping process to suit your application.
 
 ## About `language-swig-wrapper`
 
-Since SWIG's interface files (`.i`) usually contain C or C++ code, this package
+SWIG's interface files (`.i` or `.swg`) contain C or C++ code, so this package
 expands on grammars from the [`language-c`](https://atom.io/packages/language-c)
 package. Essentially, this package takes the `language-c` package and adds
 support for SWIG's `%include`, etc.
